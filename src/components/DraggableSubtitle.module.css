@@ -1,0 +1,41 @@
+.draggableTextContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  cursor: grab;
+  z-index: 20;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  touch-action: none; /* Crucial for preventing scrolling while dragging on mobile */
+}
+
+.draggableTextContainer:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.draggableTextContainer.dragging {
+  cursor: grabbing;
+  border-color: var(--primary);
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.textInput {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  width: auto;
+  min-width: 200px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.textInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}

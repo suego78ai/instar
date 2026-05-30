@@ -50,7 +50,7 @@ body {
   height: 100vh;
   height: 100dvh; /* For mobile browsers with dynamic UI */
   width: 100vw;
-  max-width: 600px; /* Limit width on desktop for mobile feel */
+  max-width: 1200px; /* Expanded for desktop split layout */
   margin: 0 auto;
   background-color: var(--surface);
   position: relative;

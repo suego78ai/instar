@@ -8,6 +8,7 @@
 
 .header {
   height: 60px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,16 +29,58 @@
 
 .content {
   flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.splitLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.playerSection {
+  flex: 1;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  background-color: var(--background);
+}
+
+.editorSection {
+  flex: 1;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+/* Desktop layout: Side-by-side */
+@media (min-width: 768px) {
+  .splitLayout {
+    flex-direction: row;
+  }
+  .playerSection {
+    flex: 2; /* Player takes more width */
+    border-right: 1px solid var(--border);
+    border-bottom: none;
+  }
+  .editorSection {
+    flex: 1; /* Editor panel takes less width */
+    min-width: 320px;
+    max-width: 400px;
+    border-top: none;
+    border-left: 1px solid var(--border);
+  }
 }
 
 .playerPlaceholder {
   width: 100%;
+  max-width: 400px;
   aspect-ratio: 9 / 16;
   max-height: 70vh;
   background: linear-gradient(145deg, var(--surface), var(--border));
@@ -48,33 +91,4 @@
   color: var(--text-muted);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
   border: 1px dashed var(--text-muted);
-}
-
-.bottomNav {
-  height: 64px;
-  background-color: var(--surface);
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: stretch;
-  padding: 0;
-  margin: 0;
-}
-
-.navItem {
-  flex: 1;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navItem.active {
-  color: var(--primary);
-  border-top: 3px solid var(--primary);
 }

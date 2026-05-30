@@ -19,31 +19,97 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
-.timeline {
+/* Controls overlay at the bottom */
+.controlsOverlay {
   position: absolute;
-  bottom: 1rem;
+  bottom: 0;
   left: 0;
   width: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  padding: 24px 16px 12px 16px;
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 1rem;
+  flex-direction: column;
+  gap: 12px;
   z-index: 10;
 }
 
-.timelineDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+/* Dots for clips */
+.clipIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.clipDot {
+  flex: 1;
+  max-width: 24px;
+  height: 4px;
+  border-radius: 2px;
   background-color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.timelineDot.active {
-  width: 24px;
-  border-radius: 4px;
+.clipDot.active {
   background-color: #fff;
+  box-shadow: 0 0 4px rgba(255,255,255,0.8);
+}
+
+/* Slider area */
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.timeText {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  min-width: 40px;
+  text-align: center;
+}
+
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.3);
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  cursor: grab;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  cursor: grab;
+}
+
+.slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.2);
 }
 
 @keyframes fadeIn {

@@ -127,12 +127,61 @@
   cursor: grab;
 }
 
-.slider::-webkit-slider-thumb:active {
-  cursor: grabbing;
-  transform: scale(1.2);
-}
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Subtitle Overlays */
+.subtitleOverlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 5;
+  overflow: hidden;
+}
+
+.subtitleText {
+  position: absolute;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8), -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  white-space: pre-wrap;
+  max-width: 90%;
+  transition: font-size 0.2s, color 0.2s;
+  font-weight: bold;
+  transform: translate(-50%, -50%); /* Always centered on its anchor */
+}
+
+/* Subtitle Animations */
+.none {
+  animation: none;
+}
+
+.pop {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.fade {
+  animation: fadeInOut 0.4s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -45%); }
+  100% { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 0.5s steps(15, end) forwards;
+}
+
+@keyframes typing {
+  from { max-width: 0; }
+  to { max-width: 100%; }
 }

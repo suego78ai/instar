@@ -10,19 +10,28 @@ export default function AutoPlayer({ files }: AutoPlayerProps) {
   const [objectUrls, setObjectUrls] = useState<string[]>([]);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Convert files to URLs
   useEffect(() => {
     const urls = files.map(file => URL.createObjectURL(file));
     setObjectUrls(urls);
     setCurrentIndex(0);
+    setIsPlaying(true);
 
     return () => {
       urls.forEach(url => URL.revokeObjectURL(url));
     };
   }, [files]);
 
+  // Reset current time when media changes
+  useEffect(() => {
+    setCurrentTime(0);
+  }, [currentIndex]);
+
+  // Handle Playback and Timers
   useEffect(() => {
     if (files.length === 0 || !objectUrls.length) return;
     const currentFile = files[currentIndex];
@@ -30,31 +39,45 @@ export default function AutoPlayer({ files }: AutoPlayerProps) {
     if (currentFile.type.startsWith('image/')) {
       const IMAGE_DURATION = 3; // 3 seconds per image
       setDuration(IMAGE_DURATION);
-      setCurrentTime(0);
-      const startTime = Date.now();
       
+      if (!isPlaying) return;
+
+      let lastTime = Date.now();
       const timer = setInterval(() => {
-        const elapsed = (Date.now() - startTime) / 1000;
-        if (elapsed >= IMAGE_DURATION) {
-          clearInterval(timer);
-          handleNext();
-        } else {
-          setCurrentTime(elapsed);
-        }
-      }, 50); // roughly 20fps update for smooth slider
+        const now = Date.now();
+        const delta = (now - lastTime) / 1000;
+        lastTime = now;
+
+        setCurrentTime(prev => {
+          const nextTime = prev + delta;
+          if (nextTime >= IMAGE_DURATION) {
+            // Trigger next frame after interval
+            setTimeout(() => handleNext(), 0);
+            return 0; // Immediately reset to avoid overshooting
+          }
+          return nextTime;
+        });
+      }, 50); // 20fps for smooth slider update
       
       return () => clearInterval(timer);
-    } else if (videoRef.current) {
-      videoRef.current.play().catch(e => console.error("Autoplay prevented", e));
+    } else if (currentFile.type.startsWith('video/') && videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(e => {
+          console.error("Autoplay prevented", e);
+          setIsPlaying(false);
+        });
+      } else {
+        videoRef.current.pause();
+      }
     }
-  }, [currentIndex, files, objectUrls]);
+  }, [currentIndex, files, objectUrls, isPlaying]);
 
   const handleNext = () => {
-    if (currentIndex < files.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    } else {
-      setCurrentIndex(0); // Loop back to start
-    }
+    setCurrentIndex(prev => (prev < files.length - 1 ? prev + 1 : 0));
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(prev => !prev);
   };
 
   const handleTimeUpdate = () => {
@@ -123,6 +146,9 @@ export default function AutoPlayer({ files }: AutoPlayerProps) {
         
         {/* Slider & Time */}
         <div className={styles.sliderContainer}>
+          <button className={styles.playPauseBtn} onClick={togglePlay}>
+            {isPlaying ? '⏸' : '▶'}
+          </button>
           <span className={styles.timeText}>{formatTime(currentTime)}</span>
           <input 
             type="range" 
